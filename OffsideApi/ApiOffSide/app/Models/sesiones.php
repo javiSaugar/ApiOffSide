@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
-class sesiones extends Model
+use App\Models\Instalacion;
+use App\Models\Deporte;
+use App\Models\Usuario;
+class Sesiones extends Model
 {
 
      protected $table='sesiones';

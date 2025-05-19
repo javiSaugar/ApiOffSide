@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\CardController;
+use App\Http\Controllers\ControllerSesiones;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,4 +21,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // usuario
-Route::get('usuarios/{id}/sesiones', [UsuariosController::class, 'getSesiones']); 
+Route::get('usuarios/{id}/sesiones', [ControllerSesiones::class, 'show']); 

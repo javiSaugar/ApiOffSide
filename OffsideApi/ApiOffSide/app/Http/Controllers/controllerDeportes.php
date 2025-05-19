@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class controllerDeportes extends Controller
+class ControllerDeportes extends Controller
 {
  // Listar todos los deportes
     public function index()

@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class instalaciones extends Model
+class Instalacion extends Model
 {
-     protected $table='intalaciones';
+     protected $table='instalaciones';
      protected $primaryKey = 'ins_id';
 
      protected $casts=[

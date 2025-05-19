@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class controllerUsuarios extends Controller
+class ControllerUsuarios extends Controller
 {
     // Listar todos los usuarios
     public function index()

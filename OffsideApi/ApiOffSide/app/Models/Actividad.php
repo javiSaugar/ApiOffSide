@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class actividades extends Model
+class Actividad extends Model
 {
      protected $table='actividades';
    protected $primaryKey = 'act_id';

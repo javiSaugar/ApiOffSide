@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Sesiones;
 
-class controllerSesiones extends Controller
+class ControllerSesiones extends Controller
 {
      // Listar todas las sesiones
     public function index()
@@ -23,6 +24,7 @@ class controllerSesiones extends Controller
         }
 
         return response()->json($sesion, 200);
+       
     }
 
     // Crear una nueva sesión

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class controllerActividades extends Controller
+class ControllerActividades extends Controller
 {
     // Devuelve lista de todas las Actividades(SESION  | USURIOS )
     public function index()
