@@ -39,7 +39,7 @@ return new class extends Migration
         });
         // tabla PsMaterial 
         Schema::create('material',function(Blueprint $table){
-            $table->bigIncrements('mat_pass');
+            $table->string('mat_pass');
             $table->unsignedBigInteger('mat_use_id');
             $table->foreign('mat_use_id')->references('Use_id')->on('usuarios')->onDelete('cascade');
         });
