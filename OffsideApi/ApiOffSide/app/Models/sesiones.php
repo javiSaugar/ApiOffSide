@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Instalacion;
 use App\Models\Deporte;
 use App\Models\Usuario;
+use App\Models\Actividad;
 class Sesiones extends Model
 {
 

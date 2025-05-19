@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\Material;
 class controllerMaterial extends Controller
 {
      // Listar todos los materiales

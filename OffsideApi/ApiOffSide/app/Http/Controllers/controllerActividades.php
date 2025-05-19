@@ -3,19 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Actividad;
 
 class ControllerActividades extends Controller
 {
     // Devuelve lista de todas las Actividades(SESION  | USURIOS )
     public function index()
     {
-        return response()->json(actividades::with(['sesion', 'usuario'])->get(), 200);
+        return response()->json(Actividad::with(['sesion', 'usuario'])->get(), 200);
     }
 
     // Mostrar una actividad específica
     public function show($id)
     {
-        $actividad = actividades::with(['sesion', 'usuario'])->find($id);
+        $actividad = Actividad::with(['sesion', 'usuario'])->find($id);
 
         if (!$actividad) {
             return response()->json(['message' => 'Actividad no encontrada'], 404);
@@ -32,7 +33,7 @@ class ControllerActividades extends Controller
             'act_use_id' => 'required|integer|exists:usuarios,id',
         ]);
 
-        $actividad = actividades::create($request->all());
+        $actividad = Actividad::create($request->all());
 
         return response()->json($actividad, 201);
     }
@@ -40,7 +41,7 @@ class ControllerActividades extends Controller
     // Actualizar una actividad
     public function update(Request $request, $id)
     {
-        $actividad = actividades::find($id);
+        $actividad = Actividad::find($id);
 
         if (!$actividad) {
             return response()->json(['message' => 'Actividad no encontrada'], 404);
@@ -54,7 +55,7 @@ class ControllerActividades extends Controller
     // Eliminar una actividad
     public function destroy($id)
     {
-        $actividad = actividades::find($id);
+        $actividad = Actividad::find($id);
 
         if (!$actividad) {
             return response()->json(['message' => 'Actividad no encontrada'], 404);

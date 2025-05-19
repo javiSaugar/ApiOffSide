@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-class controllerInstalaciones extends Controller
+use App\Models\Instalacion;
+class ControllerInstalaciones extends Controller
 {
      // Listar todas las instalaciones
     public function index()
