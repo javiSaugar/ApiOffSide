@@ -10,7 +10,7 @@ class ControllerDeportes extends Controller
  // Listar todos los deportes
     public function index()
     {
-        return response()->json(Deporte::with('sesiones')->get(), 200);
+         return response()->json(Deporte::all(), 200);
     }
 
     // Mostrar un deporte específico
