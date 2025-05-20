@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Instalacion;
+
 class ControllerInstalaciones extends Controller
 {
      // Listar todas las instalaciones
     public function index()
     {
-        return response()->json(instalaciones::with('sesiones')->get(), 200);
+        return response()->json(Instalacion::all(), 200);
     }
 
     // Mostrar una instalación específica

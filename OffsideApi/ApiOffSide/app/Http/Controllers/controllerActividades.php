@@ -7,10 +7,10 @@ use App\Models\Actividad;
 
 class ControllerActividades extends Controller
 {
-    // Devuelve lista de todas las Actividades(SESION  | USURIOS )
+    // Devuelve lista de todas las Actividades(SESION  | USUARIOS )
     public function index()
     {
-        return response()->json(Actividad::with(['sesion', 'usuario'])->get(), 200);
+        return response()->json(Actividad::all(), 200);
     }
 
     // Mostrar una actividad específica
