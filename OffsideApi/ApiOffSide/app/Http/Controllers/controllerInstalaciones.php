@@ -16,13 +16,13 @@ class ControllerInstalaciones extends Controller
     // Mostrar una instalación específica
     public function show($id)
     {
-        $instalacion = instalaciones::with('sesiones')->find($id);
+    $instalacion = Instalacion::find($id);
 
         if (!$instalacion) {
             return response()->json(['message' => 'Instalación no encontrada'], 404);
         }
 
-        return response()->json($instalacion, 200);
+    return response()->json($instalacion, 200);
     }
 
     // Crear una nueva instalación

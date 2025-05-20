@@ -16,13 +16,13 @@ class ControllerDeportes extends Controller
     // Mostrar un deporte específico
     public function show($id)
     {
-        $deporte = Deporte::with('sesiones')->find($id);
+    $deporte = Deporte::find($id);
 
-        if (!$deporte) {
-            return response()->json(['message' => 'Deporte no encontrado'], 404);
-        }
+    if (!$deporte) {
+        return response()->json(['message' => 'Deporte no encontrado'], 404);
+    }
 
-        return response()->json($deporte, 200);
+    return response()->json($deporte, 200);
     }
 
     // Crear un nuevo deporte

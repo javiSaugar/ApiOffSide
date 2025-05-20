@@ -10,20 +10,18 @@ class ControllerUsuarios extends Controller
     // Listar todos los usuarios
     public function index()
     {
-        $usuarios = usuarios::with(['materiales', 'sesiones', 'actividades'])->get();
-        return response()->json($usuarios, 200);
+        return response()->json(Usuario::all(), 200);
     }
 
     // Mostrar un usuario específico
     public function show($id)
     {
-        $usuario = usuarios::with(['materiales', 'sesiones', 'actividades'])->find($id);
+   $usuario = Usuario::find($id);
 
-        if (!$usuario) {
-            return response()->json(['message' => 'Usuario no encontrado'], 404);
-        }
-
-        return response()->json($usuario, 200);
+    if (!$usuario) {
+        return response()->json(['message' => 'Usuario no encontrado'], 404);
+    }
+    return response()->json($usuario, 200);
     }
 
     // Crear un nuevo usuario
