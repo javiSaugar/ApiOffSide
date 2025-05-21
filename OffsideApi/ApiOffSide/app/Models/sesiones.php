@@ -19,10 +19,11 @@ class Sesiones extends Model
         'ses_ins_id'=>'int',
         'ses_dep_id'=>'int',
         'mat_use_id'=>'int',
-
+        'ses_precio'=>'float'
     ];
       protected $fillable=[
-        'ses_hora'
+        'ses_hora',
+        'ses_nombre'
     ];
 
 

@@ -28,23 +28,14 @@ class ControllerSesiones extends Controller
     }
 
     // Crear una nueva sesión
-    public function store(Request $request)
+      public function store(Request $request)
     {
         $request->validate([
-            'ses_hora' => 'required|string|max:10',
-            'ses_fecha' => 'required|date',
-            'ses_ins_id' => 'required|exists:instalaciones,ins_id',
-            'ses_dep_id' => 'required|exists:deportes,dep_id',
-            'mat_use_id' => 'required|exists:usuarios,Use_id',
+            'ses_hora' => 'required|string',
+            'ses_nombre' => 'required|string'
         ]);
 
-        $sesion = Sesiones::create($request->only([
-            'ses_hora',
-            'ses_fecha',
-            'ses_ins_id',
-            'ses_dep_id',
-            'mat_use_id',
-        ]));
+        $sesion = Sesiones::create($request->only(['ses_hora', 'ses_nombre']));
 
         return response()->json($sesion, 201);
     }
@@ -90,4 +81,16 @@ class ControllerSesiones extends Controller
 
         return response()->json(['message' => 'Sesión eliminada correctamente'], 200);
     }
+
+    // Filtrar sesiones por nombre (parcial o exacto)
+ public function buscarPorNombreRuta($nombre)
+{
+    $sesiones = Sesiones::where('ses_nombre', 'like', '%' . $nombre . '%')->get();
+
+    if ($sesiones->isEmpty()) {
+        return response()->json(['message' => 'No se encontraron sesiones con ese nombre'], 404);
+    }
+
+    return response()->json($sesiones, 200);
+}
 }

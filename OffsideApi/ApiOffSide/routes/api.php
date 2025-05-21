@@ -47,7 +47,8 @@ Route::get('/usuarios/{id}/sesiones', [ControllerSesiones::class, 'show']); //So
 []}
 */
 //----------------------------------------------------------------------------
-Route::post('/sesiones', [ControllerSesiones::class, 'store']);//crea sesion
+Route::get('/sesiones/filtrar/{nombre}', [SesionesController::class, 'filtrarPorNombre']);
+Route::post('/sesiones', [ControllerSesiones::class, 'store']);//Crea sesion
 Route::patch('/sesiones/{id}', [SesionController::class, 'update']);//Modifica sesion
 Route::delete('/sesiones/{id}', [SesionController::class, 'destroy']);//Borrar sesion
 
@@ -110,14 +111,13 @@ Route::get('/usuarios', [ControllerUsuarios::class, 'index']);
 ]
 */
 Route::get('/usuarios/{id}', [ControllerUsuarios::class, 'show']);
-/*
-{"Use_id":1,"Use_Nom":"javiSaugar1","Use_ApeNom":"Javier Saugar","Use_telf":"617797032","Use_mail":"Javier.saugar@juanxxiii.net"}
-*/
+ 
+Route::get('/usuarios/buscar/{nombre}', [ControllerUsuarios::class, 'buscarPorNombre']);
 Route::post('/usuarios', [ControllerUsuarios::class, 'store']);
 Route::patch('/usuarios/{id}', [ControllerUsuarios::class, 'update']); 
 Route::delete('/usuarios/{id}', [ControllerUsuarios::class, 'destroy']);
 
-//Passw tiene que mirarlo david 
+//Passw 
 Route::get('/materiales', [MaterialController::class, 'index']);
 Route::get('/materiales/{id}', [MaterialController::class, 'show']);
 Route::post('/materiales', [MaterialController::class, 'store']);

@@ -83,4 +83,22 @@ class ControllerUsuarios extends Controller
 
         return response()->json(['message' => 'Usuario eliminado correctamente'], 200);
     }
+    
+    // Buscar usuarios por nombre (Use_Nom)
+    public function buscarPorNombre(Request $request)
+    {
+    $nombre = $request->input('nombre');
+
+    if (!$nombre) {
+        return response()->json(['message' => 'Parámetro "nombre" requerido'], 400);
+    }
+
+    $usuarios = usuarios::where('Use_Nom', 'like', '%' . $nombre . '%')->get();
+
+    if ($usuarios->isEmpty()) {
+        return response()->json(['message' => 'No se encontraron usuarios con ese nombre'], 404);
+    }
+
+    return response()->json($usuarios, 200);
+    }
 }
