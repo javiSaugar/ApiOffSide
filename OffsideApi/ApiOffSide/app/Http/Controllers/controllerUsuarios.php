@@ -3,20 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Usuario;
+use App\Models\User;
 
 class ControllerUsuarios extends Controller
 {
-    // Listar todos los usuarios
+    // Listar todos los usuarios(funciona)
     public function index()
     {
-        return response()->json(Usuario::all(), 200);
+        return response()->json(User::all(), 200);
     }
 
-    // Mostrar un usuario específico
+    // Mostrar un usuario específico (funciona)
     public function show($id)
     {
-   $usuario = Usuario::find($id);
+   $usuario = User::find($id);
 
     if (!$usuario) {
         return response()->json(['message' => 'Usuario no encontrado'], 404);
@@ -24,27 +24,40 @@ class ControllerUsuarios extends Controller
     return response()->json($usuario, 200);
     }
 
-    // Crear un nuevo usuario
-    public function store(Request $request)
-    {
+    // Crear un nuevo usuario(no funciona)
+   public function store(Request $request)
+{
+    /*
+    $user_auth = $request->user();
+    */
+    try {
+        // Validación de los datos recibidos
         $request->validate([
-            'Use_Nom' => 'required|string|max:255',
-            'Use_ApeNom' => 'required|string|max:255',
-            'Use_telf' => 'required|string|max:15',
-            'Use_mail' => 'required|string|email|max:255|unique:usuarios,Use_mail',
+            'nombre'    => 'required|string|max:255',
+            'password' => 'required|string|max:255',
+            'telf'   => 'required|string|max:15',
+            'email'   => 'required|string|email|max:255|unique:usuarios,Use_mail',
         ]);
 
-        $usuario = usuarios::create($request->only([
-            'Use_Nom',
-            'Use_ApeNom',
-            'Use_telf',
-            'Use_mail',
-        ]));
+        // Crear y guardar el nuevo usuario en una sola línea
+        $usuario = User::create(['name' => $request->nombre, 
+                                   'password' => $request->password,
+                                   'telf' => $request->telf,
+                                   'email' => $request->email]);
 
-        return response()->json($usuario, 201);
+        // Retornar respuesta en JSON con el usuario creado
+        return response()->json([
+            'message' => 'Usuario creado correctamente.',
+            'usuario' => $usuario
+        ], 201);
+        
+    } catch (\Exception $e) {
+        \Log::error('Error al crear usuario: ' . $e->getMessage());
+        return response()->json(['message' => 'Error al crear usuario', 'error' => $e->getMessage()], 500);
     }
-
-    // Actualizar un usuario
+    }
+    
+    // Actualizar un usuario(no funciona)
     public function update(Request $request, $id)
     {
         $usuario = usuarios::find($id);
@@ -53,52 +66,47 @@ class ControllerUsuarios extends Controller
             return response()->json(['message' => 'Usuario no encontrado'], 404);
         }
 
-        $request->validate([
-            'Use_Nom' => 'sometimes|required|string|max:255',
-            'Use_ApeNom' => 'sometimes|required|string|max:255',
-            'Use_telf' => 'sometimes|required|string|max:15',
-            'Use_mail' => 'sometimes|required|string|email|max:255|unique:usuarios,Use_mail,' . $id,
+         $request->validate([
+            'nombre'    => 'required|string|max:255',
+            'password' => 'required|string|max:255',
+            'telf'   => 'required|string|max:15',
+            'email'   => 'required|string|email|max:255|unique:usuarios,Use_mail',
         ]);
 
         $usuario->update($request->only([
-            'Use_Nom',
-            'Use_ApeNom',
-            'Use_telf',
-            'Use_mail',
+            'name' => $request->nombre, 
+            'password' => $request->password,
+            'telf' => $request->telf,
+            'email' => $request->email
         ]));
 
         return response()->json($usuario, 200);
     }
 
     // Eliminar un usuario
-    public function destroy($id)
+   public function destroy($id)
     {
-        $usuario = usuarios::find($id);
+    $usuario = User::find($id); 
 
-        if (!$usuario) {
-            return response()->json(['message' => 'Usuario no encontrado'], 404);
-        }
-
-        $usuario->delete();
-
-        return response()->json(['message' => 'Usuario eliminado correctamente'], 200);
+    if (!$usuario) {
+        return response()->json(['message' => 'Usuario no encontrado'], 404);
     }
+
+    $usuario->delete();
+
+    return response()->json(['message' => 'Usuario eliminado correctamente'], 200);
+ }
     
-    // Buscar usuarios por nombre (Use_Nom)
-    public function buscarPorNombre(Request $request)
+ // Buscar usuarios por nombre (Funciona)
+    public function buscarPorNombre( $nombre)
     {
-    $nombre = $request->input('nombre');
+    // Buscar usuario por Use_Nom
+    $usuario = User::where('name', $nombre)->first();
 
-    if (!$nombre) {
-        return response()->json(['message' => 'Parámetro "nombre" requerido'], 400);
+    if (!$usuario) {
+        return response()->json(['message' => 'Usuario no encontrado'], 404);
     }
 
-    $usuarios = usuarios::where('Use_Nom', 'like', '%' . $nombre . '%')->get();
-
-    if ($usuarios->isEmpty()) {
-        return response()->json(['message' => 'No se encontraron usuarios con ese nombre'], 404);
-    }
-
-    return response()->json($usuarios, 200);
+    return response()->json($usuario, 200);
     }
 }

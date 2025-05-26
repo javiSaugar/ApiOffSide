@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('usuarios',function(Blueprint $table){
             $table->bigIncrements('Use_id');
             $table->string('Use_Nom');
-            $table->string('Use-ApeNom');
+            $table->string('Use_ApeNom');
             $table->string('Use_telf');
             $table->string('Use_mail');
         });

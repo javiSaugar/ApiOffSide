@@ -82,15 +82,16 @@ class ControllerSesiones extends Controller
         return response()->json(['message' => 'Sesión eliminada correctamente'], 200);
     }
 
-    // Filtrar sesiones por nombre (parcial o exacto)
- public function buscarPorNombreRuta($nombre)
-{
-    $sesiones = Sesiones::where('ses_nombre', 'like', '%' . $nombre . '%')->get();
+    // Filtrar sesiones por nombre
+    public function buscarPorNombreSesion($nombre)
+    {
+    // Buscar usuario por Use_Nom
+    $sesion = Sesiones::where('', $nombre)->first();
 
-    if ($sesiones->isEmpty()) {
-        return response()->json(['message' => 'No se encontraron sesiones con ese nombre'], 404);
+    if (!$sesion) {
+        return response()->json(['message' => 'Sesion no encontrado'], 404);
     }
 
-    return response()->json($sesiones, 200);
-}
+    return response()->json($sesion, 200);
+    }
 }

@@ -8,7 +8,7 @@ class Usuario extends Model
 {
     protected $table='usuarios';
      protected $primaryKey = 'Use_id';
-  
+    public $timestamps = false;
     protected $casts=[
         'Use_id'=>'int'
     ];
