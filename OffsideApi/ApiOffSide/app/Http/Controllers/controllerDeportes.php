@@ -29,11 +29,11 @@ class ControllerDeportes extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'dep_Nombre' => 'required|string|max:255',
-            'dep_numParticipantes' => 'nullable|integer',
+            'dep_nombre' => 'required|string|max:255',
+            'dep_numparticipantes' => 'nullable|integer',
         ]);
 
-        $deporte = Deporte::create($request->only(['dep_Nombre', 'dep_numParticipantes']));
+        $deporte = Deporte::create($request->only(['dep_nombre', 'dep_numparticipantes']));
 
         return response()->json($deporte, 201);
     }
