@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Sesiones;
-
+use Illuminate\Support\Facades\Validator;
 class ControllerSesiones extends Controller
 {
      // Listar todas las sesiones
@@ -28,17 +28,64 @@ class ControllerSesiones extends Controller
     }
 
     // Crear una nueva sesión
-      public function store(Request $request)
-    {
+public function store(Request $request)
+{  
+   try {
+        // Validar campos sin exists porque vienen objetos
         $request->validate([
-            'ses_hora' => 'required|string',
-            'ses_nombre' => 'required|string'
+            'ses_hora'   => 'sometimes|required|string|max:10',
+            'ses_fecha'  => 'sometimes|required|date',
+            'ses_ins_id' => 'sometimes|required',
+            'ses_dep_id' => 'sometimes|required',
+            'mat_use_id' => 'sometimes|required',
+            'ses_precio' => 'sometimes|required|numeric',
+            'ses_nombre' => 'sometimes|required|string|min:3|max:255',
         ]);
 
-        $sesion = Sesiones::create($request->only(['ses_hora', 'ses_nombre']));
+        // Extraer los IDs de los objetos o usarlos directamente si ya son IDs
+        $ses_ins_id = is_object($request->ses_ins_id) ? $request->ses_ins_id->ins_id : $request->ses_ins_id;
+        $ses_dep_id = is_object($request->ses_dep_id) ? $request->ses_dep_id->dep_id : $request->ses_dep_id;
+        $ses_use_id = is_object($request->mat_use_id) ? $request->mat_use_id->id : $request->mat_use_id;
 
-        return response()->json($sesion, 201);
+        // Validar que esos IDs sí existen en la BD
+        $validator = Validator::make([
+            'ses_ins_id' => $ses_ins_id,
+            'ses_dep_id' => $ses_dep_id,
+            'ses_use_id' => $ses_use_id,
+        ], [
+            'ses_ins_id' => 'exists:instalaciones,ins_id',
+            'ses_dep_id' => 'exists:deportes,dep_id',
+            'ses_use_id' => 'exists:users,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // Crear la sesión con los IDs extraídos
+        $sesion = Sesiones::create([
+            'ses_hora'   => $request->ses_hora,
+            'ses_fecha'  => $request->ses_fecha,
+            'ses_ins_id' => $ses_ins_id,
+            'ses_dep_id' => $ses_dep_id,
+            'ses_use_id' => $ses_use_id,
+            'ses_precio' => $request->ses_precio,
+            'ses_nombre' => $request->ses_nombre,
+        ]);
+
+        return response()->json([
+            'message' => 'Sesión creada correctamente.',
+            'sesion'  => $sesion
+        ], 201);
+
+    } catch (\Exception $e) {
+        \Log::error('Error al crear sesión: ' . $e->getMessage());
+        return response()->json([
+            'message' => 'Error al crear sesión',
+            'error'   => $e->getMessage()
+        ], 500);
     }
+}
 
     // Actualizar una sesión
     public function update(Request $request, $id)

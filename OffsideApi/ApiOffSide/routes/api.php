@@ -38,7 +38,7 @@ Route::get('/sesiones', [ControllerSesiones::class, 'index']);
 ]
 */
 //Uno
-Route::get('/usuarios/{id}/sesiones', [ControllerSesiones::class, 'show']); //Solo uno 
+Route::get('/sesiones/{id}', [ControllerSesiones::class, 'show']); //Solo uno 
 /*
 {"ses_id":2,"ses_fecha":"2025-02-03T00:00:00.000000Z","ses_hora":"10:00","ses_ins_id":1,"ses_dep_id":10,"ses_use_id":1,
 "instalacion":{"ins_id":1,"ins_ nombre":"Santo Domingo","ins_localidad":"Alcorcon","ins_calle":"Los robles","ins_num":11,"ins_coordenadas":"40?20'20''N 3?50'60''26O"},

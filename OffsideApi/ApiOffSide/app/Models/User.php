@@ -11,7 +11,8 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
-
+    //para que los campos que genera automaticamente no los pide
+    public $timestamps = false;
     /**
      * The attributes that are mass assignable.
      *

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
+use App\Models\Usuario;
 
 class ControllerUsuarios extends Controller
 {
@@ -40,7 +40,7 @@ class ControllerUsuarios extends Controller
         ]);
 
         // Crear y guardar el nuevo usuario en una sola línea
-        $usuario = User::create(['name' => $request->nombre, 
+        $usuario = Usuario::create(['name' => $request->nombre, 
                                    'password' => $request->password,
                                    'telf' => $request->telf,
                                    'email' => $request->email]);
