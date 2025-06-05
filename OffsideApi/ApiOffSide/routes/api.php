@@ -26,13 +26,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
   
 });
 
-
-
-
-
-
-
-
 // Sesiones 
 // Funcionan Todos
 Route::get('/sesiones', [ControllerSesiones::class, 'index']);
@@ -48,8 +41,8 @@ Route::get('/actividades/{id}', [ControllerActividades::class, 'show']);
 Route::post('/actividades', [ControllerActividades::class, 'store']);
 Route::patch('/actividades/{id}', [ControllerActividades::class, 'update']); 
 Route::delete('/actividades/{id}', [ControllerActividades::class, 'destroy']);
-Route::get('/actividades/sesion/{sesionId}', [ActividadController::class, 'getBySesionId']);
-Route::get('/actividades/usuario/{userId}', [ActividadController::class, 'getByUserId']);
+Route::get('/actividades/sesion/{sesionId}', [ControllerActividades::class, 'getBySesionId']);
+Route::get('/actividades/usuario/{userId}', [ControllerActividades::class, 'getByUserId']);
 
 // Deportes
 //Funcionan todos 
@@ -72,13 +65,13 @@ Route::delete('/instalaciones/{id}', [ControllerInstalaciones::class, 'destroy']
 // Rutas públicas
 Route::post('/login', [ControllerUsuarios::class, 'login']);
 Route::post('/usuarios', [ControllerUsuarios::class, 'store']);
+Route::get('/usuarios', [ControllerUsuarios::class, 'index']);
 
 // Rutas protegidas con Sanctum
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [ControllerUsuarios::class, 'logout']);
     Route::get('/profile', [ControllerUsuarios::class, 'user']);
 
-    Route::get('/usuarios', [ControllerUsuarios::class, 'index']);
     Route::get('/usuarios/{id}', [ControllerUsuarios::class, 'show']);
     Route::put('/usuarios/{id}', [ControllerUsuarios::class, 'update']);
     Route::delete('/usuarios/{id}', [ControllerUsuarios::class, 'destroy']);
