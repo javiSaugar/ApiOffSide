@@ -28,23 +28,33 @@ class ControllerInstalaciones extends Controller
     // Crear una nueva instalación
     public function store(Request $request)
     {
-        $request->validate([
-            'ins_Nombre' => 'required|string|max:255',
-            'ins_localidad' => 'required|string|max:255',
-            'ins_calle' => 'nullable|string|max:255',
+         try {
+        // Validar los datos recibidos
+        $validatedData = $request->validate([
+            'ins_nombre'      => 'required|string|max:255',
+            'ins_localidad'   => 'required|string|max:255',
+            'ins_calle'       => 'nullable|string|max:255',
             'ins_coordenadas' => 'nullable|string|max:255',
-            'ins_num' => 'nullable|integer'
+            'ins_num'         => 'nullable|integer',
         ]);
 
-        $instalacion = instalaciones::create($request->only([
-            'ins_Nombre',
-            'ins_localidad',
-            'ins_calle',
-            'ins_coordenadas',
-            'ins_num'
-        ]));
+        // Crear la instalación
+        $instalacion = Instalacion::create($validatedData);
 
-        return response()->json($instalacion, 201);
+        // Devolver la respuesta en JSON
+        return response()->json([
+            'message' => 'Instalación creada correctamente.',
+            'instalacion' => $instalacion
+        ], 201);
+
+    } catch (\Exception $e) {
+        \Log::error('Error al crear instalación: ' . $e->getMessage());
+
+        return response()->json([
+            'message' => 'Error al crear la instalación.',
+            'error' => $e->getMessage()
+        ], 500);
+    }
     }
 
     // Actualizar una instalación
@@ -78,14 +88,14 @@ class ControllerInstalaciones extends Controller
     // Eliminar una instalación
     public function destroy($id)
     {
-        $instalacion = instalaciones::find($id);
+        $instalacion = Instalacion::find($id); // Nombre de clase corregido
 
-        if (!$instalacion) {
-            return response()->json(['message' => 'Instalación no encontrada'], 404);
-        }
+    if (!$instalacion) {
+        return response()->json(['message' => 'Instalación no encontrada'], 404);
+    }
 
-        $instalacion->delete();
+    $instalacion->delete();
 
-        return response()->json(['message' => 'Instalación eliminada correctamente'], 200);
+    return response()->json(['message' => 'Instalación eliminada correctamente'], 200);
     }
 }

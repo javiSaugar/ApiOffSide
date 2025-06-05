@@ -4,9 +4,63 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class ControllerUsuarios extends Controller
 {
+
+public function login(Request $request)
+{
+    // Validamos los campos que esperamos recibir
+    try {
+        $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string',
+        ]);
+    } catch (ValidationException $e) {
+        // Capturamos la excepción de validación y devolvemos una respuesta JSON
+        return response()->json([
+            'mensaje' => 'Faltan campos por rellenar o los campos no son válidos',
+            'errores' => $e->errors()
+        ], 422);
+    }
+
+    // Intentamos obtener el usuario con ese email
+    $user = User::where('email', $request->email)->first();
+
+    // Verificamos si el usuario existe y la contraseña es correcta
+    if (!$user || !Hash::check($request->password, $user->password)) {
+        return response()->json([
+            'mensaje' => 'Las credenciales proporcionadas son incorrectas'
+        ], 401);
+    }
+
+    // Generamos un token de acceso para el usuario
+    $token = $user->createToken('auth_token')->plainTextToken;
+
+    // Devolvemos una respuesta JSON con el token de acceso y el usuario
+    return response()->json([
+        'mensaje' => 'Inicio de sesión exitoso',
+        'token' => $token,
+        'token_type' => 'Bearer',
+        'user' => $user
+    ], 200);
+}
+
+public function user(Request $request)
+{
+    return $request->user();
+}
+
+public function logout(Request $request)
+{
+    $request->user()->tokens()->delete();
+    return response()->json(['message' => 'Sesión cerrada'], 200);
+}
+
+
    /**
      * Muestra todos los usuarios.
      */
@@ -141,8 +195,11 @@ class ControllerUsuarios extends Controller
 {
     $nombre = $request->query('nombre');
 
-    $usuarios = User::where('ses_nombre', 'like', "%$nombre%")->get();
+    $usuarios = User::where('name', 'like', "%$nombre%")->get();
 
     return response()->json($usuarios);
 }
+
+
+
 }

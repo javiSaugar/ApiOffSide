@@ -28,14 +28,33 @@ class ControllerDeportes extends Controller
     // Crear un nuevo deporte
     public function store(Request $request)
     {
+        try {
+        // Validar los datos recibidos
         $request->validate([
             'dep_nombre' => 'required|string|max:255',
-            'dep_numparticipantes' => 'nullable|integer',
+            'dep_numparticipantes' => 'required|integer',
         ]);
 
-        $deporte = Deporte::create($request->only(['dep_nombre', 'dep_numparticipantes']));
+        // Crear el deporte con los datos validados
+        $deporte = Deporte::create([
+            'dep_nombre' => $request->dep_nombre,
+            'dep_numparticipantes' => $request->dep_numparticipantes,
+        ]);
 
-        return response()->json($deporte, 201);
+        // Retornar respuesta con código 201 y el objeto creado
+        return response()->json([
+            'message' => 'Deporte creado correctamente.',
+            'deporte' => $deporte,
+        ], 201);
+
+    } catch (\Exception $e) {
+        \Log::error('Error al crear deporte: ' . $e->getMessage());
+
+        return response()->json([
+            'message' => 'Error al crear deporte',
+            'error' => $e->getMessage(),
+        ], 500);
+    }
     }
 
     // Actualizar un deporte

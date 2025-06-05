@@ -8,15 +8,17 @@ class Deporte extends Model
 {
      protected $table='deportes';
     protected $primaryKey = 'dep_id';
+    public $timestamps = false;
 
      protected $casts=[
         'dep_id'=>'int',
-        'dep_numParticipantes'
+        'dep_numparticipantes'=>'int'
        
     ];
    
     protected $fillable=[
-        'dep_Nombre'
+        'dep_nombre',
+        'dep_numparticipantes'
     ];
 
         public function sesiones()

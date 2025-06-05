@@ -90,29 +90,28 @@ public function store(Request $request)
     // Actualizar una sesión
     public function update(Request $request, $id)
     {
-        $sesion = Sesiones::find($id);
+         $sesion = Sesiones::find($id);
 
-        if (!$sesion) {
-            return response()->json(['message' => 'Sesión no encontrada'], 404);
-        }
+    if (!$sesion) {
+        return response()->json(['message' => 'Sesión no encontrada'], 404);
+    }
 
-        $request->validate([
-            'ses_hora' => 'sometimes|required|string|max:10',
-            'ses_fecha' => 'sometimes|required|date',
-            'ses_ins_id' => 'sometimes|required|exists:instalaciones,ins_id',
-            'ses_dep_id' => 'sometimes|required|exists:deportes,dep_id',
-            'mat_use_id' => 'sometimes|required|exists:usuarios,Use_id',
-        ]);
+    $validated = $request->validate([
+        'ses_hora' => 'sometimes|required|string|max:10',
+        'ses_fecha' => 'sometimes|required|date',
+        'ses_ins_id' => 'sometimes|required|exists:instalaciones,ins_id',
+        'ses_dep_id' => 'sometimes|required|exists:deportes,dep_id',
+        'ses_use_id' => 'sometimes|required|exists:users,id',
+        'ses_precio' => 'sometimes|required|numeric',
+        'ses_nombre' => 'sometimes|required|string|max:255',
+    ]);
 
-        $sesion->update($request->only([
-            'ses_hora',
-            'ses_fecha',
-            'ses_ins_id',
-            'ses_dep_id',
-            'mat_use_id',
-        ]));
+    $sesion->update($validated);
 
-        return response()->json($sesion, 200);
+    return response()->json([
+        'message' => 'Sesión actualizada correctamente',
+        'sesion' => $sesion,
+    ]);
     }
 
     // Eliminar una sesión
@@ -132,13 +131,14 @@ public function store(Request $request)
     // Filtrar sesiones por nombre
     public function buscarPorNombreSesion($nombre)
     {
-    // Buscar usuario por Use_Nom
-    $sesion = Sesiones::where('', $nombre)->first();
+    $sesiones = Sesiones::with(['instalacion', 'deporte', 'usuario', 'actividades'])
+                ->where('ses_nombre', 'LIKE', "%{$nombre}%")
+                ->get();
 
-    if (!$sesion) {
-        return response()->json(['message' => 'Sesion no encontrado'], 404);
+    if ($sesiones->isEmpty()) {
+        return response()->json(['message' => 'Sesión no encontrada'], 404);
     }
 
-    return response()->json($sesion, 200);
+    return response()->json($sesiones, 200);
     }
 }

@@ -28,14 +28,21 @@ class ControllerActividades extends Controller
     // Crear una nueva actividad
     public function store(Request $request)
     {
-        $request->validate([
-            'act_ses_id' => 'required|integer|exists:sesions,id',  // ajusta 'id' si el PK es distinto
-            'act_use_id' => 'required|integer|exists:usuarios,id',
-        ]);
+    // Aquí validas y asignas el resultado a $validated
+    $validated = $request->validate([
+        'act_ses_id' => 'required|integer|exists:sesiones,ses_id',
+        'act_use_id' => 'required|integer|exists:users,id',
+    ]);
 
-        $actividad = Actividad::create($request->all());
+    $actividad = new Actividad();
+    $actividad->act_ses_id = $validated['act_ses_id'];
+    $actividad->act_use_id = $validated['act_use_id'];
+    $actividad->save();
 
-        return response()->json($actividad, 201);
+    return response()->json([
+        'message' => 'Actividad creada correctamente',
+        'data' => $actividad
+    ], 201);
     }
 
     // Actualizar una actividad
@@ -65,5 +72,38 @@ class ControllerActividades extends Controller
 
         return response()->json(['message' => 'Actividad eliminada correctamente'], 200);
     }
+
+    public function getBySesionId($sesionId)
+{
+    $actividades = Actividad::where('act_ses_id', $sesionId)->get();
+
+    if ($actividades->isEmpty()) {
+        return response()->json([
+            'message' => 'No se encontraron actividades para esta sesión.'
+        ], 404);
+    }
+
+    return response()->json([
+        'message' => 'Actividades encontradas.',
+        'data' => $actividades
+    ]);
+}
+
+// Obtener actividades por ID de usuario
+public function getByUserId($userId)
+{
+    $actividades = Actividad::where('act_use_id', $userId)->get();
+
+    if ($actividades->isEmpty()) {
+        return response()->json([
+            'message' => 'No se encontraron actividades para este usuario.'
+        ], 404);
+    }
+
+    return response()->json([
+        'message' => 'Actividades encontradas.',
+        'data' => $actividades
+    ]);
+}
 
 }

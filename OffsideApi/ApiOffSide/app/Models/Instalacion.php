@@ -8,16 +8,17 @@ class Instalacion extends Model
 {
      protected $table='instalaciones';
      protected $primaryKey = 'ins_id';
-
+    public $timestamps = false;
      protected $casts=[
         'ins_id'=>'int',
         'ins_num'=>'int'
     ];
    
     protected $fillable=[
-        'ins_Nombre',
+        'ins_nombre',
         'ins_localidad',
         'ins_calle',
+         'ins_num',
         'ins_coordenadas'
     ];
 
