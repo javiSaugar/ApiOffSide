@@ -65,10 +65,11 @@ Route::delete('/instalaciones/{id}', [ControllerInstalaciones::class, 'destroy']
 // Rutas públicas
 Route::post('/login', [ControllerUsuarios::class, 'login']);
 Route::post('/usuarios', [ControllerUsuarios::class, 'store']);
-Route::get('/usuarios', [ControllerUsuarios::class, 'index']);
+
 
 // Rutas protegidas con Sanctum
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/usuarios', [ControllerUsuarios::class, 'index']);
     Route::post('/logout', [ControllerUsuarios::class, 'logout']);
     Route::get('/profile', [ControllerUsuarios::class, 'user']);
 

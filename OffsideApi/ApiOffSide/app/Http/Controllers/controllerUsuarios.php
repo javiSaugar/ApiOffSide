@@ -51,7 +51,7 @@ public function login(Request $request)
 
 public function user(Request $request)
 {
-    return $request->user();
+     return response()->json($request->user());
 }
 
 public function logout(Request $request)
@@ -94,8 +94,8 @@ public function logout(Request $request)
         'name'     => 'required|string|max:255',
         'email'    => 'required|email|max:255',
         'password' => 'required|string|min:6',
-        'telf'     => 'nullable|string|max:15',
-        'nom_ape'  => 'nullable|string|max:255',
+        'telf'     => 'required|string|max:15',
+        'nom_ape'  => 'required|string|max:255',
         ]);
         // Validar que el email no exista en DB (como validación adicional)
         $validator = Validator::make($request->all(), [
@@ -112,7 +112,7 @@ public function logout(Request $request)
             'email'    => $request->email,
             'password' => Hash::make($request->password),
             'telf'     => $request->telf,
-            'ape_nom'  => $request->ape_nom,
+            'nom_ape' => $request->nom_ape,
         ]);
 
         return response()->json([

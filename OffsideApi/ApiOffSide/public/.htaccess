@@ -2,12 +2,17 @@
     RewriteEngine On
     RewriteBase /
 
-    # Redirección a HTTPS
     RewriteCond %{HTTPS} !=on
     RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+    # Pasar Authorization header (Javi esto es necesario si o si para Laravel Sanctum)
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
     RewriteRule ^index\.php$ - [L]
+
+    # Redirigir todo lo que no sea archivo o carpeta existente a index.php
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule . /index.php [L]
+    RewriteRule ^ index.php [L]
 </IfModule>
